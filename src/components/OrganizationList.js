@@ -9,7 +9,6 @@ const OrganizationList = () => {
   const history = useHistory();
   const [data, setData] = useState([]);
   const [url, setUrl] = useState(`${baseURL}/organizations`);
-  const [value, setValue] = useState('');
 
   useEffect(() => {
     async function fetchData() {
@@ -18,15 +17,6 @@ const OrganizationList = () => {
     }
     fetchData();
   }, [url]);
-
-  const onChange = e => {
-    setValue(e.target.value);
-
-    // console.log(Object.values(data));
-
-    // data.map(row => {
-    // })
-  };
 
   return (
     <>
@@ -44,12 +34,13 @@ const OrganizationList = () => {
           {
             property: 'address',
             header: 'Address',
-            search: true
+            search: true,
+            primary: true
           }
         ]}
         data={data}
         onClickRow={({ datum }) => history.push(`/organizations/${datum.id}`)}
-        sortable="true"
+        sortable={true}
       />
     </>
   );
