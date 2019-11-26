@@ -1,6 +1,9 @@
 import React from 'react';
 import { Grommet, Box, Button, Heading } from 'grommet';
 import { Notification } from 'grommet-icons';
+import { Switch, Route, Link } from 'react-router-dom';
+import OrganizationList from './components/OrganizationList';
+import OrganizationDetail from './components/OrganizationDetail';
 
 const App = () => {
   return (
@@ -8,22 +11,38 @@ const App = () => {
       <Box fill>
         <AppBar>
           <Heading level="3" margin="none">
-            My App
+            HPE
           </Heading>
           <Button icon={<Notification />} onClick={() => {}} />
         </AppBar>
         <Box direction="row" flex overflow={{ horizontal: 'hidden' }}>
-          <Box flex align="center" justify="center">
-            app body
-          </Box>
           <Box
-            width="medium"
+            width="small"
             background="light-2"
             elevation="small"
             align="center"
-            justify="center"
+            justify="start"
           >
-            sidebar
+            <Link to="/organizations">Organizations</Link>
+          </Box>
+
+          <Box
+            flex
+            align="start"
+            justify="start"
+            fill="horizontal"
+            style={{ padding: 20 }}
+          >
+            <Switch>
+              <Route
+                path="/organizations/:id"
+                children={<OrganizationDetail />}
+              />
+
+              <Route path="/organizations">
+                <OrganizationList />
+              </Route>
+            </Switch>
           </Box>
         </Box>
       </Box>
