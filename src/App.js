@@ -4,6 +4,9 @@ import { Notification } from 'grommet-icons';
 import { Switch, Route, Link } from 'react-router-dom';
 import OrganizationList from './components/OrganizationList';
 import OrganizationDetail from './components/OrganizationDetail';
+import UserList from './components/UserList';
+import AssetList from './components/AssetList';
+import { AssetCreate, AssetEdit } from './components/AssetForm';
 
 const App = () => {
   return (
@@ -34,12 +37,15 @@ const App = () => {
             style={{ padding: 20 }}
           >
             <Switch>
+              <Route path="/organizations/:id/assets" component={AssetList} />
+              <Route path="/organizations/:id/users" component={UserList} />
               <Route
                 path="/organizations/:id"
                 children={<OrganizationDetail />}
               />
-
-              <Route path="/organizations" children={<OrganizationList />} />
+              <Route path="/organizations" component={OrganizationList} />
+              <Route path="/assets/create" component={AssetCreate} />
+              <Route path="/assets/:id/edit" component={AssetEdit} />
             </Switch>
           </Box>
         </Box>

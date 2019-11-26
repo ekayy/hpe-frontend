@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { DataTable, Box, Text, Button, TextInput, Select } from 'grommet';
 import { Trash, Edit, AddCircle } from 'grommet-icons';
 import SearchInput from './SearchInput';
@@ -91,13 +91,14 @@ const AssetList = React.memo(props => {
       options.push(column['property']);
   }
 
+  console.log(props);
+
   return (
     <>
-      {/* <Link to={`${baseURL}/asset/create`}> */}
-      <Button icon={<AddCircle />} onClick={() => {}}>
-        Add Asset
-      </Button>
-      {/* </Link> */}
+      <Button
+        icon={<AddCircle />}
+        onClick={() => history.push(`/assets/create`, {})}
+      />
 
       <SearchInput
         options={options}
