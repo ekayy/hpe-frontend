@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { baseURL } from '../config';
 import axios from 'axios';
-import { Link, useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 
 import { Paragraph, Text, Tabs, Tab } from 'grommet';
 import AssetList from './AssetList';
@@ -28,6 +28,22 @@ const OrganizationDetail = () => {
     fetchData(usersUrl, setUserData);
   }, []);
 
+  const handleAdd = async () => {
+    const res = await axios.post(`${baseURL}/assets`);
+
+    setAssetData([...assetData, res.data]);
+  };
+
+  const handleEdit = async id => {
+    const res = await axios.put(`${baseURL}/assets/${id}`);
+    setAssetData(assetData.filter(item => item.id !== id));
+  };
+
+  const handleDelete = async id => {
+    await axios.delete(`${baseURL}/assets/${id}`);
+    setAssetData(assetData.filter(item => item.id !== id));
+  };
+
   return (
     <>
       <Text>Organization: {data.name}</Text>
@@ -36,10 +52,21 @@ const OrganizationDetail = () => {
 
       <Tabs flex>
         <Tab title="Assets">
-          <AssetList data={assetData} />
+          <AssetList
+            data={assetData}
+            handleEdit={handleEdit}
+            handleAdd={handleAdd}
+            handleDelete={handleDelete}
+          />
         </Tab>
+
         <Tab title="Users">
-          <UserList data={userData} />
+          <UserList
+            data={userData}
+            handleEdit={handleEdit}
+            handleAdd={handleAdd}
+            handleDelete={handleDelete}
+          />
         </Tab>
       </Tabs>
     </>
