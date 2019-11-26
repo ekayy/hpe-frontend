@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { DataTable, Box, Select, TextInput } from 'grommet';
+import { DataTable, Box } from 'grommet';
+import SearchInput from './SearchInput';
 
 const columns = [
   {
@@ -21,13 +22,19 @@ const columns = [
   }
 ];
 
+const options = [];
+
+for (let column of columns) {
+  options.push(column['property']);
+}
+
 const UserList = props => {
   const { data } = props;
   const [value, setValue] = React.useState('');
   const [selectValue, setSelectValue] = React.useState('firstName');
   const [searchResults, setSearchResults] = React.useState([...data]);
 
-  const onChange = e => {
+  const handleChange = e => {
     setValue(e.target.value);
 
     let results = data.filter(
@@ -41,26 +48,19 @@ const UserList = props => {
 
   return (
     <>
-      <Box direction="row" justify="center" pad={{ vertical: '20px' }}>
-        <TextInput
-          placeholder="Search"
-          value={value}
-          onChange={onChange}
-          type="search"
-        />
-        <Select
-          options={Object.keys(data[0]).filter(key => key !== 'id')}
-          value={selectValue}
-          onChange={({ option }) => setSelectValue(option)}
-          placeholder="Search by Column"
-        />
-      </Box>
+      <SearchInput
+        options={options}
+        value={value}
+        selectValue={selectValue}
+        onChange={handleChange}
+        onChangeSelect={({ option }) => setSelectValue(option)}
+        type="submit"
+      />
 
       <DataTable
         columns={columns}
         data={data}
         sortable={true}
-        search={true}
         data={searchResults.length ? searchResults : data}
       />
     </>

@@ -1,11 +1,11 @@
 import React from 'react';
 
 import { useHistory } from 'react-router-dom';
-import { DataTable, Button } from 'grommet';
+import { DataTable, Button, Box } from 'grommet';
 import { Trash, Edit, AddCircle } from 'grommet-icons';
 import SearchInput from './SearchInput';
 
-const AssetList = React.memo(props => {
+const AssetList = props => {
   const history = useHistory();
   const { data, handleEdit, handleAdd, handleDelete } = props;
   const [value, setValue] = React.useState('');
@@ -93,19 +93,23 @@ const AssetList = React.memo(props => {
 
   return (
     <>
-      <Button
-        icon={<AddCircle />}
-        onClick={() => history.push(`/assets/create`, {})}
-      />
+      <Box flex direction="row" justify="center" align="center" gap="medium">
+        <SearchInput
+          options={options}
+          value={value}
+          selectValue={selectValue}
+          onChange={handleChange}
+          onChangeSelect={({ option }) => setSelectValue(option)}
+          type="submit"
+        />
 
-      <SearchInput
-        options={options}
-        value={value}
-        selectValue={selectValue}
-        onChange={handleChange}
-        onChangeSelect={({ option }) => setSelectValue(option)}
-        type="submit"
-      />
+        <Button
+          icon={<AddCircle />}
+          label="Create New Asset"
+          primary
+          onClick={() => history.push(`/assets/create`, {})}
+        />
+      </Box>
 
       <DataTable
         columns={columns}
@@ -115,6 +119,6 @@ const AssetList = React.memo(props => {
       />
     </>
   );
-});
+};
 
 export default AssetList;
