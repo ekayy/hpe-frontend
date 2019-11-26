@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { useHistory, useParams } from 'react-router-dom';
-import { DataTable, Box, Text, Button, TextInput, Select } from 'grommet';
+import { useHistory } from 'react-router-dom';
+import { DataTable, Button } from 'grommet';
 import { Trash, Edit, AddCircle } from 'grommet-icons';
 import SearchInput from './SearchInput';
 
@@ -90,8 +90,6 @@ const AssetList = React.memo(props => {
     if (column['property'] !== 'delete' && column['property'] !== 'edit')
       options.push(column['property']);
   }
-
-  console.log(props);
 
   return (
     <>

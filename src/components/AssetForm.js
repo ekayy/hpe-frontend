@@ -1,13 +1,31 @@
-import React, { useEffect } from 'react';
-import { TextInput, Button, FormField, Form, Select } from 'grommet';
-import { withFormik, Formik } from 'formik';
+import React from 'react';
+import { baseURL } from '../config';
+import axios from 'axios';
+import { useParams, useHistory } from 'react-router-dom';
+import { Button, FormField, Form, Select } from 'grommet';
+import { withFormik } from 'formik';
+import * as Yup from 'yup';
+
+const AssetSchema = Yup.object().shape({
+  name: Yup.string()
+    .min(2, 'Too Short!')
+    .max(50, 'Too Long!')
+    .required('Required')
+});
 
 export const AssetEdit = props => {
-  return <AssetForm {...props.location.state.datum} />;
+  let { id } = useParams();
+  const history = useHistory();
+
+  return (
+    <AssetForm {...props.location.state.datum} id={id} history={history} />
+  );
 };
 
 export const AssetCreate = props => {
-  return <AssetForm />;
+  const history = useHistory();
+
+  return <AssetForm history={history} />;
 };
 
 const AssetBaseForm = props => {
@@ -18,11 +36,16 @@ const AssetBaseForm = props => {
     handleChange,
     handleBlur,
     handleSubmit,
-    setFieldValue
+    setFieldValue,
+    handleEdit
   } = props;
 
   return (
-    <Form style={{ width: '100%' }} onSubmit={handleSubmit}>
+    <Form
+      style={{ width: '100%' }}
+      onSubmit={handleSubmit}
+      handleEdit={handleEdit}
+    >
       <FormField
         name="name"
         label="Name"
@@ -30,6 +53,7 @@ const AssetBaseForm = props => {
         setFieldValue={setFieldValue}
         handleChange={handleChange}
       />
+      {/* {errors.name && touched.name ? <div>{errors.name}</div> : null} */}
       <FormField
         name="brand"
         label="Brand"
@@ -51,14 +75,15 @@ const AssetBaseForm = props => {
         setFieldValue={setFieldValue}
         handleChange={handleChange}
       />
-      <FormField label="Type">
-        <Select
-          name="type"
-          options={['compute', 'storage', 'network']}
-          value={values.type}
-          onChange={({ option }) => setFieldValue('type', option)}
-        />
-      </FormField>
+
+      <Select
+        label="Type"
+        name="type"
+        options={['compute', 'storage', 'network']}
+        value={values.type}
+        onChange={({ option }) => setFieldValue('type', option)}
+      />
+
       <FormField
         name="acquisition"
         label="Acquistion"
@@ -81,14 +106,15 @@ const AssetBaseForm = props => {
         onChange={handleChange}
       />
       <FormField name="userId" label="User ID" value={values.userId} />
-      <FormField name="retired" label="Retired">
-        <Select
-          options={['true', 'false']}
-          value={values.retired}
-          setFieldValue={setFieldValue}
-          onChange={({ option }) => setFieldValue('retired', option === true)}
-        />
-      </FormField>
+
+      <Select
+        label="retired"
+        name="retired"
+        options={['true', 'false']}
+        value={values.retired}
+        onChange={({ option }) => setFieldValue('retired', option)}
+      />
+
       <FormField
         name="cost"
         label="Cost"
@@ -102,13 +128,53 @@ const AssetBaseForm = props => {
 };
 
 const AssetForm = withFormik({
-  // mapPropsToValues: () => ({}),
+  mapPropsToValues: props => {
+    const {
+      name,
+      brand,
+      model,
+      serialNumber,
+      type,
+      acquisition,
+      warrantyExpiration,
+      organizationId,
+      userId,
+      retired,
+      cost
+    } = props;
 
-  // validationSchema: CreateGarmentSchema,
-
-  handleSubmit: async (values, { props, setSubmitting }) => {
-    console.log(values);
+    return {
+      name,
+      brand,
+      model,
+      serialNumber,
+      type,
+      acquisition,
+      warrantyExpiration,
+      organizationId,
+      userId,
+      retired: retired === 'true',
+      cost
+    };
   },
 
-  displayName: 'CreateDiscussionForm'
+  validationSchema: AssetSchema,
+
+  handleSubmit: async (values, { props, setSubmitting }) => {
+    const { id, history } = props;
+
+    if (id) {
+      const res = await axios.put(`${baseURL}/assets/${id}`, { values });
+      return history.push(`/organizations/${res.data.organizationId}`, {
+        showMessage: true
+      });
+    } else {
+      const res = await axios.post(`${baseURL}/assets`, { values });
+      return history.push(`/organizations/${res.data.organizationId}`, {
+        showMessage: true
+      });
+    }
+  },
+
+  displayName: 'AssetForm'
 })(AssetBaseForm);
