@@ -39,9 +39,7 @@ const App = () => {
                 children={<OrganizationDetail />}
               />
 
-              <Route path="/organizations">
-                <OrganizationList />
-              </Route>
+              <Route path="/organizations" children={<OrganizationList />} />
             </Switch>
           </Box>
         </Box>
