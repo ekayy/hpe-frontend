@@ -20,7 +20,7 @@ const App = () => {
           </Link>
           <Button icon={<Notification />} onClick={() => {}} />
         </AppBar>
-        <Box direction="row" flex overflow={{ horizontal: 'hidden' }}>
+        <Box direction="row" flex align="start">
           <Box
             flex
             align="start"
@@ -29,8 +29,14 @@ const App = () => {
             style={{ padding: 20 }}
           >
             <Switch>
-              <Route path="/organizations/:id/assets" component={AssetList} />
-              <Route path="/organizations/:id/users" component={UserList} />
+              <Route
+                path="/organizations/:id/assets"
+                component={OrganizationDetail}
+              />
+              <Route
+                path="/organizations/:id/users"
+                component={OrganizationDetail}
+              />
               <Route path="/organizations/:id" component={OrganizationDetail} />
               <Route path="/organizations" component={OrganizationList} />
               <Route path="/assets/create" component={AssetCreate} />
