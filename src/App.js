@@ -13,22 +13,14 @@ const App = () => {
     <Grommet theme={theme} full>
       <Box fill>
         <AppBar>
-          <Heading level="3" margin="none">
-            HPE
-          </Heading>
+          <Link to="/">
+            <Heading level="3" margin="none">
+              HPE
+            </Heading>
+          </Link>
           <Button icon={<Notification />} onClick={() => {}} />
         </AppBar>
         <Box direction="row" flex overflow={{ horizontal: 'hidden' }}>
-          <Box
-            width="small"
-            background="light-2"
-            elevation="small"
-            align="center"
-            justify="start"
-          >
-            <Link to="/organizations">Organizations</Link>
-          </Box>
-
           <Box
             flex
             align="start"
@@ -39,13 +31,11 @@ const App = () => {
             <Switch>
               <Route path="/organizations/:id/assets" component={AssetList} />
               <Route path="/organizations/:id/users" component={UserList} />
-              <Route
-                path="/organizations/:id"
-                children={<OrganizationDetail />}
-              />
+              <Route path="/organizations/:id" component={OrganizationDetail} />
               <Route path="/organizations" component={OrganizationList} />
               <Route path="/assets/create" component={AssetCreate} />
               <Route path="/assets/:id/edit" component={AssetEdit} />
+              <Route path="/" component={OrganizationList} />
             </Switch>
           </Box>
         </Box>
