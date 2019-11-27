@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { baseURL } from '../config';
 import axios from 'axios';
-import { Route, Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
-import { DataTable, Box, Meter, Text, TextInput, Heading } from 'grommet';
+import { DataTable, Box, Heading } from 'grommet';
 
 const OrganizationList = () => {
   const history = useHistory();
   const [data, setData] = useState([]);
-  const [url, setUrl] = useState(`${baseURL}/organizations`);
+  const url = `${baseURL}/organizations`;
 
   useEffect(() => {
     async function fetchData() {

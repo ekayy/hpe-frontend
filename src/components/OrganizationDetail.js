@@ -4,7 +4,7 @@ import { baseURL } from '../config';
 import axios from 'axios';
 import { NavLink, useParams } from 'react-router-dom';
 
-import { Box, Text, Paragraph, Button } from 'grommet';
+import { Box, Text, Paragraph, Button, Heading } from 'grommet';
 import AssetList from './AssetList';
 import UserList from './UserList';
 import { User, Organization } from 'grommet-icons';
@@ -48,7 +48,9 @@ const OrganizationDetail = props => {
 
   return (
     <>
-      <Text>Organization: {data.name}</Text>
+      <Heading size="small" margin="none">
+        {data.name}
+      </Heading>
 
       <Paragraph>{data.address}</Paragraph>
 
