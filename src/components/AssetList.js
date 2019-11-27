@@ -7,7 +7,7 @@ import SearchInput from './SearchInput';
 
 const AssetList = props => {
   const history = useHistory();
-  const { data, handleEdit, handleAdd, handleDelete } = props;
+  const { data, handleDelete } = props;
   const [value, setValue] = React.useState('');
   const [selectValue, setSelectValue] = React.useState('name');
   const [searchResults, setSearchResults] = React.useState(data);
