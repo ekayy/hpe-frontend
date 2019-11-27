@@ -7,6 +7,7 @@ import { Button, FormField, Form, Select, Heading } from 'grommet';
 import DatePicker from 'react-date-picker';
 import { withFormik } from 'formik';
 import * as Yup from 'yup';
+import { createSecretKey } from 'crypto';
 
 const AssetSchema = Yup.object().shape({
   name: Yup.string()
@@ -237,7 +238,7 @@ const AssetForm = withFormik({
     } = props;
 
     return {
-      name: '',
+      name,
       brand,
       model,
       serialNumber,
@@ -269,13 +270,19 @@ const AssetForm = withFormik({
         ...values
       });
 
-      return history.push(`/organizations/${res.data.organizationId}`);
+      try {
+        return history.push(`/organizations/${res.data.organizationId}`);
+      } catch (error) {
+        alert(error);
+      }
     } else {
       const res = await axios.post(`${baseURL}/assets`, { id, ...values });
 
-      console.log(res);
-
-      // return history.push(`/organizations/${res.data.organizationId}`);
+      try {
+        return history.push(`/organizations/${res.data.organizationId}`);
+      } catch (error) {
+        alert(error);
+      }
     }
   },
 
