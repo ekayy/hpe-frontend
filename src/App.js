@@ -15,9 +15,9 @@ const App = () => {
     <Grommet theme={theme} full>
       <Box fill>
         <AppBar>
-          <Link to="/">
+          <Link to="/" style={{ color: 'inherit', textDecoration: 'inherit' }}>
             <Heading level="3" margin="none">
-              HPE
+              HPE Inventory Management
             </Heading>
           </Link>
           {historyExists ? (
