@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { useHistory } from 'react-router-dom';
 import { DataTable, Button, Box } from 'grommet';
@@ -113,7 +113,7 @@ const AssetList = props => {
 
       <DataTable
         columns={columns}
-        data={searchResults.length && value ? searchResults : data}
+        data={searchResults && value ? searchResults : data}
         sortable={true}
         step={10}
       />
