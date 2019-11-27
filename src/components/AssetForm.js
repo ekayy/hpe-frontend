@@ -11,8 +11,34 @@ import * as Yup from 'yup';
 const AssetSchema = Yup.object().shape({
   name: Yup.string()
     .min(2, 'Too Short!')
+    .max(40, 'Too Long!')
+    .required('Required'),
+  brand: Yup.string()
+    .min(2, 'Too Short!')
+    .max(25, 'Too Long!')
+    .required('Required'),
+  model: Yup.string()
+    .min(2, 'Too Short!')
+    .max(25, 'Too Long!')
+    .required('Required'),
+  serialNumber: Yup.string()
+    .min(2, 'Too Short!')
+    .max(20, 'Too Long!')
+    .required('Required'),
+  type: Yup.string()
+    .min(2, 'Too Short!')
     .max(50, 'Too Long!')
-    .required('Required')
+    .required('Required'),
+  userId: Yup.number()
+    .positive('Must be a valid ID')
+    .required('Required'),
+  organizationId: Yup.number()
+    .positive('Must be a valid ID')
+    .required('Required'),
+  acquisition: Yup.date().required('Required'),
+  warrantyExpiration: Yup.date().required('Required'),
+  retired: Yup.boolean().required('Required'),
+  cost: Yup.number().required('Required')
 });
 
 export const AssetEdit = props => {
@@ -57,36 +83,41 @@ const AssetBaseForm = props => {
             name="name"
             label="Name"
             value={values.name}
-            handleChange={handleChange}
-            handleBlur={handleBlur}
+            onChange={handleChange}
             placeholder="Eric"
           />
-          {errors.name && touched.name ? <div>{errors.name}</div> : null}
+          {errors.name && touched.name ? (
+            <StyledError>{errors.name}</StyledError>
+          ) : null}
           <FormField
             name="brand"
             label="Brand"
             value={values.brand}
-            handleChange={handleChange}
+            onChange={handleChange}
             placeholder="Apple"
           />
-          {errors.brand && touched.brand ? <div>{errors.brand}</div> : null}
+          {errors.brand && touched.brand ? (
+            <StyledError>{errors.brand}</StyledError>
+          ) : null}
           <FormField
             name="model"
             label="Model"
             value={values.model}
-            handleChange={handleChange}
+            onChange={handleChange}
             placeholder="Bacon"
           />
-          {errors.model && touched.model ? <div>{errors.model}</div> : null}
+          {errors.model && touched.model ? (
+            <StyledError>{errors.model}</StyledError>
+          ) : null}
           <FormField
             name="serialNumber"
             label="Serial Number"
             value={values.serialNumber}
-            handleChange={handleChange}
+            onChange={handleChange}
             placeholder="1234-567-89000"
           />
-          {errors.serialName && touched.serialName ? (
-            <div>{errors.serialName}</div>
+          {errors.serialNumber && touched.serialNumber ? (
+            <StyledError>{errors.serialNumber}</StyledError>
           ) : null}
 
           <FormField>
@@ -99,7 +130,9 @@ const AssetBaseForm = props => {
               onChange={({ option }) => setFieldValue('type', option)}
             />
           </FormField>
-          {errors.type && touched.type ? <div>{errors.type}</div> : null}
+          {errors.type && touched.type ? (
+            <StyledError>{errors.type}</StyledError>
+          ) : null}
         </StyledColumn>
 
         <StyledColumn>
@@ -111,7 +144,7 @@ const AssetBaseForm = props => {
             placeholder="5"
           />
           {errors.organizationId && touched.organizationId ? (
-            <div>{errors.organizationId}</div>
+            <StyledError>{errors.organizationId}</StyledError>
           ) : null}
           <FormField
             name="userId"
@@ -120,7 +153,9 @@ const AssetBaseForm = props => {
             onChange={handleChange}
             placeholder="3"
           />
-          {errors.userId && touched.userId ? <div>{errors.userId}</div> : null}
+          {errors.userId && touched.userId ? (
+            <StyledError>{errors.userId}</StyledError>
+          ) : null}
 
           <FormField>
             <StyledLabel>Retired</StyledLabel>
@@ -133,17 +168,19 @@ const AssetBaseForm = props => {
             />
           </FormField>
           {errors.retired && touched.retired ? (
-            <div>{errors.retired}</div>
+            <StyledError>{errors.retired}</StyledError>
           ) : null}
 
           <FormField
             name="cost"
             label="Cost"
             value={values.cost}
-            handleChange={handleChange}
+            onChange={handleChange}
             placeholder="99.99"
           />
-          {errors.cost && touched.cost ? <div>{errors.cost}</div> : null}
+          {errors.cost && touched.cost ? (
+            <StyledError>{errors.cost}</StyledError>
+          ) : null}
         </StyledColumn>
 
         <StyledColumn>
@@ -155,6 +192,9 @@ const AssetBaseForm = props => {
               value={values.acquisition}
             />
           </FormField>
+          {errors.acquisition && touched.acquisition ? (
+            <StyledError>{errors.acquisition}</StyledError>
+          ) : null}
 
           <FormField>
             <StyledLabel>Warranty Expiration</StyledLabel>
@@ -165,6 +205,9 @@ const AssetBaseForm = props => {
               value={values.warrantyExpiration}
             />
           </FormField>
+          {errors.warrantyExpiration && touched.warrantyExpiration ? (
+            <StyledError>{errors.warrantyExpiration}</StyledError>
+          ) : null}
         </StyledColumn>
       </StyledForm>
       <Button
@@ -194,7 +237,7 @@ const AssetForm = withFormik({
     } = props;
 
     return {
-      name,
+      name: '',
       brand,
       model,
       serialNumber,
@@ -210,7 +253,7 @@ const AssetForm = withFormik({
     };
   },
 
-  // validationSchema: AssetSchema,
+  validationSchema: AssetSchema,
 
   handleSubmit: async (values, { props, setSubmitting }) => {
     const { id, history } = props;
@@ -229,7 +272,10 @@ const AssetForm = withFormik({
       return history.push(`/organizations/${res.data.organizationId}`);
     } else {
       const res = await axios.post(`${baseURL}/assets`, { id, ...values });
-      return history.push(`/organizations/${res.data.organizationId}`);
+
+      console.log(res);
+
+      // return history.push(`/organizations/${res.data.organizationId}`);
     }
   },
 
@@ -253,4 +299,8 @@ const StyledLabel = styled.label`
   margin-bottom: 6px;
   font-size: 18px;
   line-height: 24px;
+`;
+
+const StyledError = styled.label`
+  color: red;
 `;
