@@ -4,8 +4,6 @@ import { Notification } from 'grommet-icons';
 import { Switch, Route, Link } from 'react-router-dom';
 import OrganizationList from './components/OrganizationList';
 import OrganizationDetail from './components/OrganizationDetail';
-import UserList from './components/UserList';
-import AssetList from './components/AssetList';
 import { AssetCreate, AssetEdit } from './components/AssetForm';
 
 const App = () => {
@@ -21,22 +19,10 @@ const App = () => {
           <Button icon={<Notification />} onClick={() => {}} />
         </AppBar>
         <Box direction="row" flex align="start">
-          <Box
-            flex
-            align="start"
-            justify="start"
-            fill="horizontal"
-            style={{ padding: 20 }}
-          >
+          <Box flex align="start" justify="start" fill="horizontal" style={{ padding: 20 }}>
             <Switch>
-              <Route
-                path="/organizations/:id/assets"
-                component={OrganizationDetail}
-              />
-              <Route
-                path="/organizations/:id/users"
-                component={OrganizationDetail}
-              />
+              <Route path="/organizations/:id/assets" component={OrganizationDetail} />
+              <Route path="/organizations/:id/users" component={OrganizationDetail} />
               <Route path="/organizations/:id" component={OrganizationDetail} />
               <Route path="/organizations" component={OrganizationList} />
               <Route path="/assets/create" component={AssetCreate} />

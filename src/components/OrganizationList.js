@@ -11,12 +11,27 @@ const OrganizationList = () => {
   const url = `${baseURL}/organizations`;
 
   useEffect(() => {
+    // API call
     async function fetchData() {
       const result = await axios(url);
       setData(result.data);
     }
     fetchData();
   }, [url]);
+
+  const columns = [
+    {
+      property: 'name',
+      header: 'Name',
+      search: true
+    },
+    {
+      property: 'address',
+      header: 'Address',
+      search: true,
+      primary: true
+    }
+  ];
 
   return (
     <>
@@ -25,19 +40,7 @@ const OrganizationList = () => {
       </Box>
 
       <DataTable
-        columns={[
-          {
-            property: 'name',
-            header: 'Name',
-            search: true
-          },
-          {
-            property: 'address',
-            header: 'Address',
-            search: true,
-            primary: true
-          }
-        ]}
+        columns={columns}
         data={data}
         onClickRow={({ datum }) => history.push(`/organizations/${datum.id}`)}
         sortable={true}

@@ -12,66 +12,31 @@ const AssetList = props => {
   const [selectValue, setSelectValue] = React.useState('name');
   const [searchResults, setSearchResults] = React.useState(data);
 
+  // Handle search input
   const handleChange = e => {
     setValue(e.target.value);
 
     let results = data.filter(
-      row =>
-        row[selectValue] &&
-        row[selectValue].toLowerCase().includes(value.toLowerCase())
+      row => row[selectValue] && row[selectValue].toLowerCase().includes(value.toLowerCase())
     );
 
     setSearchResults(results);
   };
 
   const columns = [
-    {
-      property: 'name',
-      header: 'Name'
-    },
-    {
-      property: 'brand',
-      header: 'Brand'
-    },
-    {
-      property: 'model',
-      header: 'Model'
-    },
-    {
-      property: 'serialNumber',
-      header: 'Serial Number',
-      primary: true
-    },
-    {
-      property: 'type',
-      header: 'Type'
-    },
-    {
-      property: 'acquisition',
-      header: 'Acquisition'
-    },
-    {
-      property: 'warrantyExpiration',
-      header: 'Warranty Expiration'
-    },
-    {
-      property: 'userId',
-      header: 'User ID'
-    },
-    {
-      property: 'retired',
-      header: 'Retired?',
-      render: datum => (datum.retired ? 'Yes' : 'No')
-    },
-    {
-      property: 'cost',
-      header: 'Cost'
-    },
+    { property: 'name', header: 'Name' },
+    { property: 'brand', header: 'Brand' },
+    { property: 'model', header: 'Model' },
+    { property: 'serialNumber', header: 'Serial Number', primary: true },
+    { property: 'type', header: 'Type' },
+    { property: 'acquisition', header: 'Acquisition' },
+    { property: 'warrantyExpiration', header: 'Warranty Expiration' },
+    { property: 'userId', header: 'User ID' },
+    { property: 'retired', header: 'Retired?', render: datum => (datum.retired ? 'Yes' : 'No') },
+    { property: 'cost', header: 'Cost' },
     {
       property: 'delete',
-      render: datum => (
-        <Button icon={<Trash />} onClick={() => handleDelete(datum.id)} />
-      )
+      render: datum => <Button icon={<Trash />} onClick={() => handleDelete(datum.id)} />
     },
     {
       property: 'edit',
@@ -84,6 +49,7 @@ const AssetList = props => {
     }
   ];
 
+  // generate select options
   const options = [];
 
   for (let column of columns) {

@@ -22,6 +22,7 @@ const columns = [
   }
 ];
 
+// Generate select options
 const options = [];
 
 for (let column of columns) {
@@ -34,13 +35,12 @@ const UserList = props => {
   const [selectValue, setSelectValue] = React.useState('firstName');
   const [searchResults, setSearchResults] = React.useState([...data]);
 
+  // Handle search input
   const handleChange = e => {
     setValue(e.target.value);
 
     let results = data.filter(
-      row =>
-        row[selectValue] &&
-        row[selectValue].toLowerCase().includes(value.toLowerCase())
+      row => row[selectValue] && row[selectValue].toLowerCase().includes(value.toLowerCase())
     );
 
     setSearchResults(results);

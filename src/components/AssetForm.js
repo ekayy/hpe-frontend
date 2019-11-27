@@ -7,7 +7,6 @@ import { Button, FormField, Form, Select, Heading } from 'grommet';
 import DatePicker from 'react-date-picker';
 import { withFormik } from 'formik';
 import * as Yup from 'yup';
-import { createSecretKey } from 'crypto';
 
 const AssetSchema = Yup.object().shape({
   name: Yup.string()
@@ -66,15 +65,7 @@ export const AssetCreate = props => {
 };
 
 const AssetBaseForm = props => {
-  const {
-    values,
-    touched,
-    errors,
-    handleChange,
-    handleBlur,
-    handleSubmit,
-    setFieldValue
-  } = props;
+  const { values, touched, errors, handleChange, handleBlur, handleSubmit, setFieldValue } = props;
 
   return (
     <Form onSubmit={handleSubmit}>
@@ -87,9 +78,7 @@ const AssetBaseForm = props => {
             onChange={handleChange}
             placeholder="Eric"
           />
-          {errors.name && touched.name ? (
-            <StyledError>{errors.name}</StyledError>
-          ) : null}
+          {errors.name && touched.name ? <StyledError>{errors.name}</StyledError> : null}
           <FormField
             name="brand"
             label="Brand"
@@ -97,9 +86,7 @@ const AssetBaseForm = props => {
             onChange={handleChange}
             placeholder="Apple"
           />
-          {errors.brand && touched.brand ? (
-            <StyledError>{errors.brand}</StyledError>
-          ) : null}
+          {errors.brand && touched.brand ? <StyledError>{errors.brand}</StyledError> : null}
           <FormField
             name="model"
             label="Model"
@@ -107,9 +94,7 @@ const AssetBaseForm = props => {
             onChange={handleChange}
             placeholder="Bacon"
           />
-          {errors.model && touched.model ? (
-            <StyledError>{errors.model}</StyledError>
-          ) : null}
+          {errors.model && touched.model ? <StyledError>{errors.model}</StyledError> : null}
           <FormField
             name="serialNumber"
             label="Serial Number"
@@ -131,9 +116,7 @@ const AssetBaseForm = props => {
               onChange={({ option }) => setFieldValue('type', option)}
             />
           </FormField>
-          {errors.type && touched.type ? (
-            <StyledError>{errors.type}</StyledError>
-          ) : null}
+          {errors.type && touched.type ? <StyledError>{errors.type}</StyledError> : null}
         </StyledColumn>
 
         <StyledColumn>
@@ -154,9 +137,7 @@ const AssetBaseForm = props => {
             onChange={handleChange}
             placeholder="3"
           />
-          {errors.userId && touched.userId ? (
-            <StyledError>{errors.userId}</StyledError>
-          ) : null}
+          {errors.userId && touched.userId ? <StyledError>{errors.userId}</StyledError> : null}
 
           <FormField>
             <StyledLabel>Retired</StyledLabel>
@@ -168,9 +149,7 @@ const AssetBaseForm = props => {
               onChange={({ option }) => setFieldValue('retired', option)}
             />
           </FormField>
-          {errors.retired && touched.retired ? (
-            <StyledError>{errors.retired}</StyledError>
-          ) : null}
+          {errors.retired && touched.retired ? <StyledError>{errors.retired}</StyledError> : null}
 
           <FormField
             name="cost"
@@ -179,9 +158,7 @@ const AssetBaseForm = props => {
             onChange={handleChange}
             placeholder="99.99"
           />
-          {errors.cost && touched.cost ? (
-            <StyledError>{errors.cost}</StyledError>
-          ) : null}
+          {errors.cost && touched.cost ? <StyledError>{errors.cost}</StyledError> : null}
         </StyledColumn>
 
         <StyledColumn>
@@ -211,12 +188,7 @@ const AssetBaseForm = props => {
           ) : null}
         </StyledColumn>
       </StyledForm>
-      <Button
-        type="submit"
-        primary
-        label="Submit"
-        style={{ alignSelf: 'flex-end' }}
-      />
+      <Button type="submit" primary label="Submit" style={{ alignSelf: 'flex-end' }} />
     </Form>
   );
 };
@@ -244,9 +216,7 @@ const AssetForm = withFormik({
       serialNumber,
       type,
       acquisition: acquisition ? new Date(acquisition) : new Date(),
-      warrantyExpiration: warrantyExpiration
-        ? new Date(warrantyExpiration)
-        : new Date(),
+      warrantyExpiration: warrantyExpiration ? new Date(warrantyExpiration) : new Date(),
       organizationId,
       userId,
       retired,
@@ -258,13 +228,14 @@ const AssetForm = withFormik({
 
   handleSubmit: async (values, { props, setSubmitting }) => {
     const { id, history } = props;
-
     const { acquisition, warrantyExpiration } = values;
 
+    // convert date back to same format of backend
     values['acquisition'] = acquisition.toISOString();
     values['warrantyExpiration'] = warrantyExpiration.toISOString();
 
     if (id) {
+      // PUT asset
       const res = await axios.put(`${baseURL}/assets/${id}`, {
         id,
         ...values
@@ -276,7 +247,11 @@ const AssetForm = withFormik({
         alert(error);
       }
     } else {
-      const res = await axios.post(`${baseURL}/assets`, { id, ...values });
+      // POST asset
+      const res = await axios.post(`${baseURL}/assets`, {
+        id,
+        ...values
+      });
 
       try {
         return history.push(`/organizations/${res.data.organizationId}`);

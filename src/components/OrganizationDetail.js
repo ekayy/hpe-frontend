@@ -4,7 +4,7 @@ import { baseURL } from '../config';
 import axios from 'axios';
 import { NavLink, useParams } from 'react-router-dom';
 
-import { Box, Text, Paragraph, Button, Heading } from 'grommet';
+import { Box, Paragraph, Button, Heading } from 'grommet';
 import AssetList from './AssetList';
 import UserList from './UserList';
 import { User, Organization } from 'grommet-icons';
@@ -30,6 +30,7 @@ const OrganizationDetail = props => {
     fetchData(usersUrl, setUserData);
   }, []);
 
+  /* TODO lift state: pass add and edit through to form */
   const handleAdd = async () => {
     const res = await axios.post(`${baseURL}/assets`);
 
@@ -46,6 +47,9 @@ const OrganizationDetail = props => {
     setAssetData(assetData.filter(item => item.id !== id));
   };
 
+  // check url is user?
+  const isUserUrl = /users$/.test(props.match.url);
+
   return (
     <>
       <Heading size="small" margin="none">
@@ -56,23 +60,14 @@ const OrganizationDetail = props => {
 
       <Box flex direction="row" gap="small">
         <NavLink to={`/organizations/${id}/assets`}>
-          <Button
-            icon={<Organization />}
-            label="View Assets"
-            active={!/users$/.test(props.match.url)}
-          />
+          <Button icon={<Organization />} label="View Assets" active={!isUserUrl} />
         </NavLink>
         <NavLink to={`/organizations/${id}/users`}>
-          <Button
-            icon={<User />}
-            label="View Users"
-            active={/users$/.test(props.match.url)}
-          />
+          <Button icon={<User />} label="View Users" active={isUserUrl} />
         </NavLink>
       </Box>
 
-      {/* <Box flex align="start" justify="start" fill="horizontal"> */}
-      {/users$/.test(props.match.url) ? (
+      {isUserUrl ? (
         <UserList data={userData} />
       ) : (
         <AssetList
@@ -82,7 +77,6 @@ const OrganizationDetail = props => {
           handleDelete={handleDelete}
         />
       )}
-      {/* </Box> */}
     </>
   );
 };

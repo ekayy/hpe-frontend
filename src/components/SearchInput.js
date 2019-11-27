@@ -6,12 +6,7 @@ const SearchInput = props => {
 
   return (
     <Box direction="row" justify="center" pad={{ vertical: '20px' }}>
-      <TextInput
-        placeholder="Search"
-        value={value}
-        onChange={onChange}
-        type="search"
-      />
+      <TextInput placeholder="Search" value={value} onChange={onChange} type="search" />
       <Select
         options={options}
         value={selectValue}
