@@ -1,12 +1,16 @@
 import React from 'react';
 import { Grommet, Box, Button, Heading } from 'grommet';
-import { Notification } from 'grommet-icons';
-import { Switch, Route, Link } from 'react-router-dom';
+import { LinkPrevious } from 'grommet-icons';
+import { Switch, Route, Link, useHistory } from 'react-router-dom';
 import OrganizationList from './components/OrganizationList';
 import OrganizationDetail from './components/OrganizationDetail';
 import { AssetCreate, AssetEdit } from './components/AssetForm';
 
 const App = () => {
+  let history = useHistory();
+
+  let historyExists = true;
+
   return (
     <Grommet theme={theme} full>
       <Box fill>
@@ -16,7 +20,9 @@ const App = () => {
               HPE
             </Heading>
           </Link>
-          <Button icon={<Notification />} onClick={() => {}} />
+          {historyExists ? (
+            <Button icon={<LinkPrevious />} label="Go Back" onClick={() => history.goBack()} />
+          ) : null}
         </AppBar>
         <Box direction="row" flex align="start">
           <Box flex align="start" justify="start" fill="horizontal" style={{ padding: 20 }}>
